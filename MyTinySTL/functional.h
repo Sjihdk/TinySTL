@@ -25,11 +25,11 @@ struct binary_function
   typedef Result    result_type;
 };
 
-// 函数对象：加法
+// 函数对象：加法   
 template <class T>
 struct plus :public binary_function<T, T, T>
 {
-  T operator()(const T& x, const T& y) const { return x + y; }
+  T operator()(const T& x, const T& y) const { return x + y; } //仿函数，结构体中只包含一个重载了调用运算符的函数成员
 };
 
 // 函数对象：减法

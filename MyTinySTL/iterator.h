@@ -22,7 +22,7 @@ template <class Category, class T, class Distance = ptrdiff_t,
   class Pointer = T*, class Reference = T&>
   struct iterator
 {
-  typedef Category                             iterator_category;
+  typedef Category                             iterator_category; //迭代器种类类型
   typedef T                                    value_type;
   typedef Pointer                              pointer;
   typedef Reference                            reference;
@@ -255,7 +255,7 @@ public:
   }
   pointer operator->() const
   {
-    return &(operator*());
+    return &(operator*()); //
   }
 
   // 前进(++)变为后退(--)

@@ -1,7 +1,7 @@
 ﻿#ifndef MYTINYSTL_UTIL_H_
 #define MYTINYSTL_UTIL_H_
 
-// 这个文件包含一些通用工具，包括 move, forward, swap 等函数，以及 pair 等 
+// 这个文件包含一些通用工具，包括 move, forward, swap 等函数，以及 pair 等 ，主要是这四类
 
 #include <cstddef>
 
@@ -15,19 +15,19 @@ namespace mystl
 template <class T>
 typename std::remove_reference<T>::type&& move(T&& arg) noexcept
 {
-  return static_cast<typename std::remove_reference<T>::type&&>(arg);
+  return static_cast<typename std::remove_reference<T>::type&&>(arg); //强转为右值引用类型
 }
 
-// forward
+// forward，用来保持并传递类型的完整信息
 
 template <class T>
-T&& forward(typename std::remove_reference<T>::type& arg) noexcept
+T&& forward(typename std::remove_reference<T>::type& arg) noexcept //传入左值版本
 {
   return static_cast<T&&>(arg);
 }
 
 template <class T>
-T&& forward(typename std::remove_reference<T>::type&& arg) noexcept
+T&& forward(typename std::remove_reference<T>::type&& arg) noexcept //传入右值版本
 {
   static_assert(!std::is_lvalue_reference<T>::value, "bad forward");
   return static_cast<T&&>(arg);
@@ -35,7 +35,7 @@ T&& forward(typename std::remove_reference<T>::type&& arg) noexcept
 
 // swap
 
-template <class Tp>
+template <class Tp> //利用了move函数，很巧妙
 void swap(Tp& lhs, Tp& rhs)
 {
   auto tmp(mystl::move(lhs));
@@ -51,7 +51,7 @@ ForwardIter2 swap_range(ForwardIter1 first1, ForwardIter1 last1, ForwardIter2 fi
   return first2;
 }
 
-template <class Tp, size_t N>
+template <class Tp, size_t N> //数组类型的交换
 void swap(Tp(&a)[N], Tp(&b)[N])
 {
   mystl::swap_range(a, a + N, b);
@@ -74,7 +74,7 @@ struct pair
 
   // default constructiable
   template <class Other1 = Ty1, class Other2 = Ty2,
-    typename = typename std::enable_if<
+    typename std::enable_if<
     std::is_default_constructible<Other1>::value &&
     std::is_default_constructible<Other2>::value, void>::type>
     constexpr pair()
